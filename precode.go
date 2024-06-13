@@ -69,6 +69,14 @@ func postTask(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	// Проверка мапы на наличие номера задачи
+	_, taskID := tasks[task.ID]
+	if taskID {
+		http.Error(w, "Такой ID уже добавлен", http.StatusBadRequest)
+		return
+	}
+	// Добавленеи новой задачи в мапу
+	tasks[task.ID] = task
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
